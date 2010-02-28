@@ -4,3 +4,48 @@
 /**
  * Enforces a restriction on group posts
  */
+
+/**
+ * Implementation of hook_form_FORM_ID_alter
+ */
+function og_signup_form_signup_form_alter(&$form, $form_state) {
+  $node = node_load($form["nid"]["#value"]);
+  $node_groups = og_get_node_groups($node);
+  
+  // Remember if the user is a member of at least one of the groups that the post belongs to
+  $form['user_is_member'] = array(
+    '#type' => 'value',
+    '#value' => false,
+  );
+  
+  if (is_array($node_groups) && count($node_groups) > 0) {
+    $user_is_member = false;
+    foreach ($node_groups as $gid => $gname) { // iterate through all the groups this post belongs to
+      // if user belongs to one of these groups
+      if (og_is_group_member($gid, false)) {
+        $form['user_is_member']['#value'] = true;
+        break;
+      }
+    }
+    
+    
+    if ($form['user_is_member']['#value'] !== true) {
+      $form['collapse']['signup_message'] = array(
+        '#value' => '<div>' . t('You must be a group member to sign up.') . '</div>',
+        '#weight' => 4,
+      );
+      $form['collapse']['submit']['#disabled'] = true;
+      $form['collapse']['submit']['#weight'] = 5; // weighted so the message appears before
+      $form["#validate"][] = 'og_signup_form_signup_form_validate';
+    }
+  }
+}
+
+/**
+ * Implementation of hook_validate
+ */
+function og_signup_form_signup_form_validate(&$form, $form_state) {
+  if ($form['user_is_member']['#value'] !== true) {
+    form_set_error($form['collapse']['submit']['#disabled'], t('You must be a group member to sign up.'));
+  }
+}
