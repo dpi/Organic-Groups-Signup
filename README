@@ -7,3 +7,5 @@ This allows you to keep nodes visible to non-group members, and deny them from s
 An alternative to this would be making the group post private.
 
 Nodes that are not group posts, and therefore have no relation to a group, are not affected.
+
+This restriction is not retroactive, only new signups are affected.
