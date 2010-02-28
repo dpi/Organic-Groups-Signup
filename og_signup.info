@@ -1,0 +1,7 @@
+; $Id$
+name = Organic Groups Signup Restriction
+description = Only group members can sign up to group posts.
+core = 6.x
+dependencies[] = og
+dependencies[] = signup
+package = Organic groups
