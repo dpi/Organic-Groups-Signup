@@ -1,6 +1,6 @@
 $Id$
 
-Enforces a restriction on nodes that are group posts. Members belonging to the same group that the node belongs to can signup.
+Enforces a restriction on group posts nodes. Members belonging to the same group that the node belongs to can signup.
 
 This allows you to keep nodes visible to non-group members, and deny them from signing up.
 
